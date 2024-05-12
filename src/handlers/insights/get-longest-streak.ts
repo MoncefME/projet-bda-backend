@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
-import { connect, close } from "../../config/database.config";
 import OracleDB from "oracledb";
+import { connect, close } from "../../config/database.config";
+import { formatDate } from "../../utils/date-formatter";
 
 interface LongestStreak {
-  start_date: Date;
-  end_date: Date;
+  start_date: string;
+  end_date: string;
   days: number;
 }
 
@@ -33,7 +33,9 @@ const getLongestStreak = async (): Promise<LongestStreak | null> => {
       return null;
     }
 
-    const [start_date, end_date, days] = longestStreak;
+    const start_date = formatDate(longestStreak[0]);
+    const end_date = formatDate(longestStreak[1]);
+    const days = longestStreak[2];
 
     return { start_date, end_date, days };
   } catch (error) {
