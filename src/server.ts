@@ -1,6 +1,7 @@
 import express from "express";
 import { configureMiddleware } from "./middleware/middleware.config";
 import { activityRouter, insightsRouter } from "./routes";
+import { ENV } from "./config/env.config";
 
 const app = express();
 
@@ -13,6 +14,6 @@ app.get("/", async (req, res) => {
 app.use("/activities", activityRouter);
 app.use("/insights", insightsRouter);
 
-app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
+app.listen(ENV.PORT, () => {
+  console.log(`Server is running on http://localhost:${ENV.PORT}`);
 });
