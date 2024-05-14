@@ -1,4 +1,16 @@
-import { getLongestBreak } from "./get-longest-break";
-import { getLongestStreak } from "./get-longest-streak";
+import {
+  getLongestStreakPLSQL,
+  getLongestBreakPLSQL,
+} from "./get-break-streak-plsql";
 
-export { getLongestBreak, getLongestStreak };
+import {
+  getLongestBreakNoPLSQL,
+  getLongestStreakNoPLSQL,
+} from "./get-break-streak-no-plsql";
+
+export {
+  getLongestStreakPLSQL,
+  getLongestBreakPLSQL,
+  getLongestStreakNoPLSQL,
+  getLongestBreakNoPLSQL,
+};
