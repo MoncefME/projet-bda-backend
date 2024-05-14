@@ -14,6 +14,6 @@ app.get("/", async (req, res) => {
 app.use("/activities", activityRouter);
 app.use("/insights", insightsRouter);
 
-app.listen(ENV.SERVERPORT, () => {
-  console.log(`Server is running on http://localhost:${ENV.SERVERPORT}`);
+app.listen(ENV.PORT, () => {
+  console.log(`Server is running on http://localhost:${ENV.PORT}`);
 });
