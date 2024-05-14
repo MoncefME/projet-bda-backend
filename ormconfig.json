@@ -1,8 +1,0 @@
-{
-    "type": "oracle",
-    "username": "your_username",
-    "password": "your_password",
-    "connectString": "your_connection_string ",
-    "entities": ["./src/entity/**/*.ts"] 
-  }
-  

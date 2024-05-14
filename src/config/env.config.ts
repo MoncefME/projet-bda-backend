@@ -3,9 +3,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const ENV = {
-  user: process.env.ORACLE_USER,
-  password: process.env.ORACLE_PASSWORD,
-  connectionString: process.env.ORACLE_CONNECTION_STRING,
-  PORT:process.env.PORT,
-  configDir: 'D:\Oracle_21c\homes\OraDB21Home1\NETWORK\ADMIN'
+  ORACLE_USER: process.env.ORACLE_USER,
+  ORACLE_PASSWORD: process.env.ORACLE_PASSWORD,
+  ORACLE_CONNECTION_STRING: process.env.ORACLE_CONNECTION_STRING,
+  PORT: process.env.PORT,
 };
