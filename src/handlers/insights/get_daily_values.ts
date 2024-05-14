@@ -12,10 +12,10 @@ const getDailyValue = async (year: number): Promise<DailyValue[] | null> => {
 
     try {
         const query = `BEGIN :cursor := get_daily_distnace( :year ); END;`;
-
+        const v_year = year? year : 0
         const bindVars = {
             cursor: { dir: OracleDB.BIND_OUT, type: OracleDB.CURSOR },
-            year: { dir: OracleDB.BIND_IN, val: year, type: OracleDB.NUMBER }, 
+            year: { dir: OracleDB.BIND_IN, val: v_year, type: OracleDB.NUMBER }, 
         };
 
         const result = await connection.execute<{
