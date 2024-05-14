@@ -6,6 +6,7 @@ CREATE OR REPLACE FUNCTION get_best_effort_1km(
 ) RETURN NUMBER IS
     best_effort NUMBER;
 BEGIN
+best_effort :=0;
     SELECT ELAPSED_TIME INTO best_effort
     FROM BESTEFFORTS
     WHERE ATHLETE_ID = athlete_id AND NAME = '1K'
@@ -16,6 +17,10 @@ BEGIN
     FETCH FIRST 1 ROW ONLY;
 
     RETURN best_effort;
+    EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        -- Handle case when there are no activities between the provided months
+        RETURN 0;
 END;
 
 
@@ -28,6 +33,7 @@ p_year NUMBER
 ) RETURN NUMBER IS
   best_effort NUMBER;
 BEGIN
+best_effort :=0;
   SELECT ELAPSED_TIME INTO best_effort
   FROM BESTEFFORTS
   WHERE ATHLETE_ID = athlete_id AND NAME = '5K'
@@ -38,6 +44,10 @@ BEGIN
   FETCH FIRST 1 ROW ONLY;
   
   RETURN best_effort;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        -- Handle case when there are no activities between the provided months
+        RETURN 0;
 END;
 
 
@@ -51,6 +61,7 @@ p_year NUMBER
 ) RETURN NUMBER IS
   best_effort NUMBER;
 BEGIN
+best_effort :=0;
   SELECT ELAPSED_TIME INTO best_effort
   FROM BESTEFFORTS
   WHERE ATHLETE_ID = athlete_id AND NAME = '10K'
@@ -61,6 +72,10 @@ BEGIN
   FETCH FIRST 1 ROW ONLY;
   
   RETURN best_effort;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        -- Handle case when there are no activities between the provided months
+        RETURN 0;
 END;
 
 
@@ -72,6 +87,7 @@ p_year NUMBER
 ) RETURN NUMBER IS
   best_effort NUMBER;
 BEGIN
+best_effort :=0;
   SELECT ELAPSED_TIME INTO best_effort
   FROM BESTEFFORTS
   WHERE ATHLETE_ID = athlete_id AND NAME = 'Half-Marathon'
@@ -82,6 +98,10 @@ BEGIN
   FETCH FIRST 1 ROW ONLY;
   
   RETURN best_effort;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        -- Handle case when there are no activities between the provided months
+        RETURN 0;
 END;
 
 
@@ -92,7 +112,7 @@ SET SERVEROUTPUT ON;
 DECLARE
   best_effort_1km NUMBER;
 BEGIN
-  best_effort_1km := get_best_effort_1km(43957994,0,0,0); 
+  best_effort_1km := get_best_effort_1km(43957994,1,3,2019); 
   DBMS_OUTPUT.PUT_LINE('Best effort for 1km: ' || best_effort_1km || ' seconds');
 END;
 
@@ -101,7 +121,7 @@ END;
 DECLARE
   best_effort_5km NUMBER;
 BEGIN
-  best_effort_5km := get_best_effort_5km(43957994,1,12,2024); 
+  best_effort_5km := get_best_effort_5km(43957994,1,3,2019); 
   DBMS_OUTPUT.PUT_LINE('Best effort for 5km: ' || best_effort_5km || ' seconds');
 END;
 
@@ -110,7 +130,7 @@ END;
 DECLARE
   best_effort_10km NUMBER;
 BEGIN
-  best_effort_10km := get_best_effort_10km(43957994,0,0,0); 
+  best_effort_10km := get_best_effort_10km(43957994,1,3,2019); 
   DBMS_OUTPUT.PUT_LINE('Best effort for 10km: ' || best_effort_10km || ' seconds');
 END;
 
@@ -119,6 +139,6 @@ END;
 DECLARE
   best_effort_half_marathon NUMBER;
 BEGIN
-  best_effort_half_marathon := get_best_effort_half_marathon(43957994,1,12,2023); 
+  best_effort_half_marathon := get_best_effort_half_marathon(43957994,1,3,2019); 
   DBMS_OUTPUT.PUT_LINE('Best effort for Half Marathon: ' || best_effort_half_marathon || ' seconds');
 END;
