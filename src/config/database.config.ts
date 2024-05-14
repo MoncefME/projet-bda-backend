@@ -5,9 +5,12 @@ const databaseConfig: OracleDB.ConnectionAttributes = {
   user: ENV.ORACLE_USER,
   password: ENV.ORACLE_PASSWORD,
   connectString: ENV.ORACLE_CONNECTION_STRING,
+
+
 };
 
 async function getConnection() {
+  console.log(ENV.ORACLE_CONNECTION_STRING, ENV.ORACLE_PASSWORD,ENV.ORACLE_USER)
   try {
     const connection = await OracleDB.getConnection(databaseConfig);
     return connection;
