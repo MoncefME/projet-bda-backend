@@ -8,9 +8,12 @@ import {
   getLongestStreakNoPLSQL,
 } from "./get-break-streak-no-plsql";
 
+import { getDailyValue } from "./get_daily_values";
+
 export {
   getLongestStreakPLSQL,
   getLongestBreakPLSQL,
   getLongestStreakNoPLSQL,
   getLongestBreakNoPLSQL,
+  getDailyValue
 };

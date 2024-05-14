@@ -4,6 +4,7 @@ import {
   getLongestStreakNoPLSQL,
   getLongestBreakPLSQL,
   getLongestStreakPLSQL,
+  getDailyValue
 } from "../handlers/insights";
 
 const insightsRouter = Router();
@@ -59,5 +60,21 @@ insightsRouter.get(
     }
   }
 );
+
+
+insightsRouter.get(
+  "/find-daily-values/:year",
+  async (req: Request, res: Response) => {
+    try {
+      const year = Number(req.params.year);      
+      const result = await getDailyValue(year);
+      res.status(200).json(result);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+);
+
 
 export default insightsRouter;
