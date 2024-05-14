@@ -19,7 +19,7 @@ BEGIN
     FROM (
         SELECT TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY') AS day_of_week, COUNT(*) AS activity_count
         FROM activities
-        WHERE start_date >= start_date_param AND start_date <= end_date_param
+        WHERE start_date >= start_date_param AND start_date <= end_date_param AND SPORT_TYPE = 'Run'
         GROUP BY TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY')
         ORDER BY activity_count DESC
     )
@@ -30,7 +30,7 @@ BEGIN
     FROM (
         SELECT TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY') AS day_of_week, COUNT(*) AS activity_count
         FROM activities
-        WHERE start_date >= start_date_param AND start_date <= end_date_param
+        WHERE start_date >= start_date_param AND start_date <= end_date_param AND SPORT_TYPE = 'Run'
         GROUP BY TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY')
         ORDER BY activity_count ASC
     )

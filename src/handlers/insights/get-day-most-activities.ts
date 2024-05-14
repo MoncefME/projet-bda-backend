@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { connect, close } from "../../config/database.config";
 import OracleDB from "oracledb";
-import { DbType } from "oracledb";
 
 interface ActivityResult {
   max_activities_day: string;
