@@ -10,8 +10,9 @@ BEGIN
         SELECT SUM(MOVING_TIME) INTO total_duration
         FROM ACTIVITIES
         WHERE SPORT_TYPE = 'Run'
-            AND EXTRACT(YEAR FROM START_DATE_LOCAL) = p_year
-           AND EXTRACT(MONTH FROM START_DATE_LOCAL) BETWEEN p_start_month AND p_end_month;
+            AND ((p_start_month = 0 AND p_end_month = 0 AND p_year = 0) -- No date filter
+            OR (EXTRACT(YEAR FROM START_DATE_LOCAL) = p_year
+                AND EXTRACT(MONTH FROM START_DATE_LOCAL) BETWEEN p_start_month AND p_end_month));
 
         -- Convert duration from seconds to hours
     total_duration := total_duration / 3600; -- 3600 seconds in an hour
@@ -25,6 +26,6 @@ SET SERVEROUTPUT ON;
 DECLARE
     total_duration NUMBER;
 BEGIN
-    total_duration := get_total_duration_between_months(1, 2, 2024);
+    total_duration := get_total_duration_between_months(0, 0, 0);
     DBMS_OUTPUT.PUT_LINE('Total duration between Jan 2023 and Mar 2023: ' || total_duration || ' hr');
 END;

@@ -15,8 +15,9 @@ BEGIN
         INTO total_activities
         FROM ACTIVITIES
         WHERE SPORT_TYPE = 'Run'
-            AND EXTRACT(YEAR FROM START_DATE_LOCAL) = p_year
-           AND EXTRACT(MONTH FROM START_DATE_LOCAL) BETWEEN p_start_month AND p_end_month;
+            AND ((p_start_month = 0 AND p_end_month = 0 AND p_year = 0) -- No date filter
+            OR (EXTRACT(YEAR FROM START_DATE_LOCAL) = p_year
+                AND EXTRACT(MONTH FROM START_DATE_LOCAL) BETWEEN p_start_month AND p_end_month));
 
         RETURN total_activities;
     
@@ -27,8 +28,10 @@ DECLARE
     total_activities INTEGER;
 BEGIN
     -- Call the function with sample input values (start month, end month, year)
-    total_activities := get_total_activities_between_months(1, 12, 2022); -- May 2023 to May 2023
+    total_activities := get_total_activities_between_months(0, 0, 0); -- May 2023 to May 2023
 
     -- Output the result
     DBMS_OUTPUT.PUT_LINE('Total activities between May 2023 and May 2023: ' || total_activities);
 END;
+
+SELECT count(*) from ACTIVITIES WHERE SPORT_TYPE = 'Run';

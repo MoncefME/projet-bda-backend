@@ -12,8 +12,9 @@ BEGIN
     SELECT COALESCE(SUM(DISTANCE), 0) INTO total_distance_meters
     FROM ACTIVITIES
     WHERE SPORT_TYPE = 'Run'
-        AND EXTRACT(YEAR FROM START_DATE_LOCAL) = p_year
-        AND EXTRACT(MONTH FROM START_DATE_LOCAL) BETWEEN p_start_month AND p_end_month;
+        AND ((p_start_month = 0 AND p_end_month = 0 AND p_year = 0) -- No date filter
+            OR (EXTRACT(YEAR FROM START_DATE_LOCAL) = p_year
+                AND EXTRACT(MONTH FROM START_DATE_LOCAL) BETWEEN p_start_month AND p_end_month));
 
     -- Convert meters to kilometers
     total_distance_km := total_distance_meters / 1000;
@@ -35,6 +36,6 @@ SET SERVEROUTPUT ON;
 DECLARE
     total_distance_km NUMBER;
 BEGIN
-    total_distance_km := get_total_distance_between_months(1, 12, 2022);
+    total_distance_km := get_total_distance_between_months(0, 0, 0);
     DBMS_OUTPUT.PUT_LINE('Total distance between Jan 2023 and Mar 2023: ' || total_distance_km || ' km');
 END;
