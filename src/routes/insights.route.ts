@@ -11,6 +11,7 @@ import { getTotalDuration } from "../handlers/insights/get-total-duration";
 import { getBestEffort1km } from "../handlers/insights/get-best-effort-1km";
 import { getBestEffort5km } from "../handlers/insights/get-best-effort-5km";
 import { getBestEffort10km } from "../handlers/insights/get-best-effort-10km";
+import { getBestEffortHM } from "../handlers/insights/get-best-effort-HM";
 const insightsRouter = Router();
 
 insightsRouter.get(
@@ -142,13 +143,22 @@ insightsRouter.get("/find-total-duration", async (req: Request, res: Response) =
 
 insightsRouter.get("/best-effort-1km", async (req, res) => {
   try {
-    const { athleteId } = req.query;
+    const { athleteId,startMonth, endMonth, year } = req.query;
+
+    if (!startMonth || !endMonth || !year) {
+      return res.status(400).json({ error: "startMonth, endMonth, and year are required" });
+    }
 
     if (!athleteId) {
       return res.status(400).json({ error: "athleteId is required" });
     }
 
-    const bestEffort1km = await getBestEffort1km(Number(athleteId));
+    const bestEffort1km = await getBestEffort1km(
+      Number(athleteId),
+      parseInt(startMonth as string),
+      parseInt(endMonth as string),
+      parseInt(year as string)
+    );
     
     if (bestEffort1km !== null) {
       return res.status(200).json({ bestEffort1km });
@@ -164,13 +174,22 @@ insightsRouter.get("/best-effort-1km", async (req, res) => {
 
 insightsRouter.get("/best-effort-5km", async (req, res) => {
   try {
-    const { athleteId } = req.query;
+    const { athleteId,startMonth, endMonth, year } = req.query;
+
+    if (!startMonth || !endMonth || !year) {
+      return res.status(400).json({ error: "startMonth, endMonth, and year are required" });
+    }
 
     if (!athleteId) {
       return res.status(400).json({ error: "athleteId is required" });
     }
 
-    const bestEffort5km = await getBestEffort5km(Number(athleteId));
+    const bestEffort5km = await getBestEffort5km(
+      Number(athleteId),
+      parseInt(startMonth as string),
+      parseInt(endMonth as string),
+      parseInt(year as string)
+    );
     
     if (bestEffort5km !== null) {
       return res.status(200).json({ bestEffort5km });
@@ -186,18 +205,57 @@ insightsRouter.get("/best-effort-5km", async (req, res) => {
 
 insightsRouter.get("/best-effort-10km", async (req, res) => {
   try {
-    const { athleteId } = req.query;
+    const { athleteId,startMonth, endMonth, year } = req.query;
+
+    if (!startMonth || !endMonth || !year) {
+      return res.status(400).json({ error: "startMonth, endMonth, and year are required" });
+    }
 
     if (!athleteId) {
       return res.status(400).json({ error: "athleteId is required" });
     }
 
-    const bestEffort10km = await getBestEffort10km(Number(athleteId));
+    const bestEffort10km = await getBestEffort10km(
+      Number(athleteId),
+      parseInt(startMonth as string),
+      parseInt(endMonth as string),
+      parseInt(year as string)
+    );
     
     if (bestEffort10km !== null) {
       return res.status(200).json({ bestEffort10km });
     } else {
       return res.status(500).json({ error: "Failed to fetch best effort for 10km from database" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+insightsRouter.get("/best-effort-hm", async (req, res) => {
+  try {
+    const { athleteId,startMonth, endMonth, year } = req.query;
+
+    if (!startMonth || !endMonth || !year) {
+      return res.status(400).json({ error: "startMonth, endMonth, and year are required" });
+    }
+
+    if (!athleteId) {
+      return res.status(400).json({ error: "athleteId is required" });
+    }
+
+    const bestEffortHM = await getBestEffortHM(
+      Number(athleteId),
+      parseInt(startMonth as string),
+      parseInt(endMonth as string),
+      parseInt(year as string)
+    );
+    
+    if (bestEffortHM !== null) {
+      return res.status(200).json({ bestEffortHM });
+    } else {
+      return res.status(500).json({ error: "Failed to fetch best effort for HM from database" });
     }
   } catch (error) {
     console.error(error);

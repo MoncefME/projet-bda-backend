@@ -3,18 +3,18 @@ import oracledb from "oracledb";
 import { connect, close } from "../../config/database.config";
 
 // Define the function to get the best effort for 1km
-const getBestEffort10km = async (
-  athlete_id : number,
-  startMonth: number,
-  endMonth: number,
-  year: number
+const getBestEffortHM = async (
+    athlete_id : number,
+    startMonth: number,
+    endMonth: number,
+    year: number
 ): Promise<string | null> =>  {
     let connection: oracledb.Connection = await connect();
   try {
 
     const query = `
     BEGIN
-    :result := get_best_effort_10km(:athlete_id, :startMonth, :endMonth, :year);
+    :result := get_best_effort_half_marathon(:athlete_id, :startMonth, :endMonth, :year);
     END;
     `;
     const bindVars = {
@@ -29,19 +29,21 @@ const getBestEffort10km = async (
         return "0";
     }
     const elapsedSeconds = result.outBinds.result;
-    // Convert seconds to minutes and remaining seconds
-    const minutes: number = Math.floor(elapsedSeconds / 60);
+    // Calculate hours, minutes, and remaining seconds
+    const hours: number = Math.floor(elapsedSeconds / 3600);
+    const minutes: number = Math.floor((elapsedSeconds % 3600) / 60);
     const seconds: number = elapsedSeconds % 60;
 
     // Construct the result string
-    const formattedTime: string = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+    const formattedTime: string = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
 
     return formattedTime;
 
 
 
+
   } catch (error) {
-    console.error("Error getting best effort for 10km:", error);
+    console.error("Error getting best effort for 1km:", error);
     return null;
   } finally {
     if (connection) {
@@ -50,4 +52,4 @@ const getBestEffort10km = async (
   }
 };
 
-export{getBestEffort10km};
+export{getBestEffortHM};
