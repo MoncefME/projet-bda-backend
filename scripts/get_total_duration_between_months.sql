@@ -18,6 +18,10 @@ BEGIN
     total_duration := total_duration / 3600; -- 3600 seconds in an hour
 
     RETURN total_duration;
+    EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        -- Handle case when there are no activities between the provided months
+        RETURN 0;
 
 END;
 
