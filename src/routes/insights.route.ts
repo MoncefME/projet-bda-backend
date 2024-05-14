@@ -11,7 +11,8 @@ import { getTotalDuration } from "../handlers/insights/get-total-duration";
 import { getBestEffort1km } from "../handlers/insights/get-best-effort-1km";
 import { getBestEffort5km } from "../handlers/insights/get-best-effort-5km";
 import { getBestEffort10km } from "../handlers/insights/get-best-effort-10km";
-import { getBestEffortHM } from "../handlers/insights/get-best-effort-HM";
+import { getBestEffortHM } from "../handlers/insights/get-best-effort-HM";import { getMonthlyDistances } from "../handlers/insights/get-distest-per-month";
+
 const insightsRouter = Router();
 
 insightsRouter.get(
@@ -65,6 +66,17 @@ insightsRouter.get(
     }
   }
 );
+
+insightsRouter.get("/monthly-distances", async (req: Request, res: Response) => {
+  try {
+    const year = req.query.year ? parseInt(req.query.year as string) : new Date().getFullYear();
+    const monthlyDistances = await getMonthlyDistances(year);
+    res.status(200).json(monthlyDistances);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 insightsRouter.get("/find-total-activities", async (req: Request, res: Response) => {
   try {
