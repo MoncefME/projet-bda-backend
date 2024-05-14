@@ -8,6 +8,8 @@ import {
   getLongestStreakNoPLSQL,
 } from "./get-break-streak-no-plsql";
 
+import { getDayMostActivities } from "./get-day-most-activities";
+
 import { getBestEffort1km } from "./get-best-effort-1km";
 import { getBestEffort5km } from "./get-best-effort-5km";
 import { getBestEffort10km } from "./get-best-effort-10km";
@@ -31,4 +33,5 @@ export {
   getTotalDistance,
   getTotalDuration,
   getMonthlyDistances,
+  getDayMostActivities,
 };

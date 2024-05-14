@@ -12,6 +12,7 @@ import {
   getTotalDistance,
   getTotalDuration,
   getMonthlyDistances,
+  getDayMostActivities,
 } from "../handlers/insights";
 
 const insightsRouter = Router();
@@ -77,6 +78,23 @@ insightsRouter.get(
         : new Date().getFullYear();
       const monthlyDistances = await getMonthlyDistances(year);
       res.status(200).json(monthlyDistances);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+);
+
+insightsRouter.get(
+  "/day-most-activities",
+  async (req: Request, res: Response) => {
+    try {
+      const startDateParam = req.body.start_date;
+      const endDateParam = req.body.end_date;
+      const startDate = new Date(startDateParam);
+      const endDate = new Date(endDateParam);
+      const result = await getDayMostActivities(startDate, endDate);
+      res.status(200).json(result);
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: "Internal server error" });
