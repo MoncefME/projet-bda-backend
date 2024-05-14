@@ -20,6 +20,10 @@ BEGIN
                 AND EXTRACT(MONTH FROM START_DATE_LOCAL) BETWEEN p_start_month AND p_end_month));
 
         RETURN total_activities;
+        EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        -- Handle case when there are no activities between the provided months
+        RETURN 0;
     
 END;
 
