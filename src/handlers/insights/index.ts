@@ -1,5 +1,18 @@
-import { getLongestBreak } from "./get-longest-break";
-import { getLongestStreak } from "./get-longest-streak";
+import {
+  getLongestStreakPLSQL,
+  getLongestBreakPLSQL,
+} from "./get-break-streak-plsql";
+
+import {
+  getLongestBreakNoPLSQL,
+  getLongestStreakNoPLSQL,
+} from "./get-break-streak-no-plsql";
 import { getDayMostActivities } from "./get-day-most-activities";
 
-export { getLongestBreak, getLongestStreak, getDayMostActivities};
+export {
+  getLongestStreakPLSQL,
+  getLongestBreakPLSQL,
+  getLongestStreakNoPLSQL,
+  getLongestBreakNoPLSQL,
+  getDayMostActivities,
+};

@@ -1,6 +1,5 @@
 import { Router, Request, Response } from "express";
 import { getActivityById, getAllActivities } from "../handlers/activity";
-import { getLongestBreak, getLongestStreak } from "../handlers/insights";
 
 const activityRouter = Router();
 
