@@ -8,6 +8,7 @@ import {
 import { getTotalActivities } from "../handlers/insights/get-total-activities";
 import { getTotalDistance } from "../handlers/insights/get-total-distance";
 import { getTotalDuration } from "../handlers/insights/get-total-duration";
+import { getBestEffort1km } from "../handlers/insights/get-best-effort-1km";
 const insightsRouter = Router();
 
 insightsRouter.get(
@@ -136,5 +137,27 @@ insightsRouter.get("/find-total-duration", async (req: Request, res: Response) =
     return res.status(500).json({ error: "Internal server error" });
   }
 });
+
+insightsRouter.get("/best-effort-1km", async (req, res) => {
+  try {
+    const { athleteId } = req.query;
+
+    if (!athleteId) {
+      return res.status(400).json({ error: "athleteId is required" });
+    }
+
+    const bestEffort1km = await getBestEffort1km(Number(athleteId));
+    
+    if (bestEffort1km !== null) {
+      return res.status(200).json({ bestEffort1km });
+    } else {
+      return res.status(500).json({ error: "Failed to fetch best effort for 1km from database" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 export default insightsRouter;
