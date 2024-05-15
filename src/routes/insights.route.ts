@@ -65,8 +65,10 @@ insightsRouter.get(
   "/day-most-activities",
   async (req: Request, res: Response) => {
     try {
-      const startDateParam = req.body.start_date;
-      const endDateParam = req.body.end_date;
+      const startDateParam = req.query.start_date as string;
+      const endDateParam = req.query.end_date as string;
+      console.log("startDateParam", startDateParam);
+      console.log("endDateParam", endDateParam);
       const startDate = new Date(startDateParam);
       const endDate = new Date(endDateParam);
       const result = await getDayMostActivities(startDate, endDate);
