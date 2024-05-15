@@ -20,11 +20,22 @@ const insightsRouter = Router();
 insightsRouter.get(
   "/find-longest-streak",
   async (req: Request, res: Response) => {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res
+        .status(400)
+        .json({ message: "startDate and endDate are required" });
+    }
+
     try {
-      const result = await getLongestStreakPLSQL();
+      const result = await getLongestStreakPLSQL(
+        startDate as string,
+        endDate as string
+      );
       res.status(200).json(result);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).json({ message: "Internal server error" });
     }
   }
@@ -46,11 +57,22 @@ insightsRouter.get(
 insightsRouter.get(
   "/find-longest-break",
   async (req: Request, res: Response) => {
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res
+        .status(400)
+        .json({ message: "startDate and endDate are required" });
+    }
+
     try {
-      const result = await getLongestBreakPLSQL();
+      const result = await getLongestBreakPLSQL(
+        startDate as string,
+        endDate as string
+      );
       res.status(200).json(result);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).json({ message: "Internal server error" });
     }
   }
