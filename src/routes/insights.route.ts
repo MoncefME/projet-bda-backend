@@ -13,6 +13,7 @@ import {
   getTotalDuration,
   getMonthlyDistances,
   getDayMostActivities,
+  getDailyValue,
 } from "../handlers/insights";
 
 const insightsRouter = Router();
@@ -118,6 +119,21 @@ insightsRouter.get(
       const startDate = new Date(startDateParam);
       const endDate = new Date(endDateParam);
       const result = await getDayMostActivities(startDate, endDate);
+
+      res.status(200).json(result);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+);
+
+insightsRouter.get(
+  "/find-daily-values/:year",
+  async (req: Request, res: Response) => {
+    try {
+      const year = Number(req.params.year);
+      const result = await getDailyValue(year);
       res.status(200).json(result);
     } catch (error) {
       console.log(error);
@@ -357,4 +373,5 @@ insightsRouter.get("/best-effort-hm", async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 });
+
 export default insightsRouter;

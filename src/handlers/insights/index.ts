@@ -19,6 +19,7 @@ import { getTotalDistance } from "./get-total-distance";
 import { getTotalDuration } from "./get-total-duration";
 
 import { getMonthlyDistances } from "./get-distest-per-month";
+import { getDailyValue } from "./get_daily_values";
 
 export {
   getLongestStreakPLSQL,
@@ -34,4 +35,5 @@ export {
   getTotalDuration,
   getMonthlyDistances,
   getDayMostActivities,
+  getDailyValue,
 };
