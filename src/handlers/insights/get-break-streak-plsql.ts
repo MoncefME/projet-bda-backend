@@ -14,14 +14,19 @@ interface LongestStreak {
   days: number;
 }
 
-const getLongestBreakPLSQL = async (): Promise<LongestBreak | null> => {
+const getLongestBreakPLSQL = async (
+  startDate: string,
+  endDate: string
+): Promise<LongestBreak | null> => {
   let connection: OracleDB.Connection = await connect();
 
   try {
-    const query = `BEGIN :cursor := longest_break(); END;`;
+    const query = `BEGIN :cursor := longest_break(:p_start_date, :p_end_date); END;`;
 
     const bindVars = {
       cursor: { dir: OracleDB.BIND_OUT, type: OracleDB.CURSOR },
+      p_start_date: startDate,
+      p_end_date: endDate,
     };
 
     const result = await connection.execute<{
@@ -52,14 +57,19 @@ const getLongestBreakPLSQL = async (): Promise<LongestBreak | null> => {
   }
 };
 
-const getLongestStreakPLSQL = async (): Promise<LongestStreak | null> => {
+const getLongestStreakPLSQL = async (
+  startDate: string,
+  endDate: string
+): Promise<LongestStreak | null> => {
   let connection: OracleDB.Connection = await connect();
 
   try {
-    const query = `BEGIN :cursor := longest_streak(); END;`;
+    const query = `BEGIN :cursor := longest_streak(:p_start_date, :p_end_date); END;`;
 
     const bindVars = {
       cursor: { dir: OracleDB.BIND_OUT, type: OracleDB.CURSOR },
+      p_start_date: startDate,
+      p_end_date: endDate,
     };
 
     const result = await connection.execute<{

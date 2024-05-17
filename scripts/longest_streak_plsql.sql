@@ -1,8 +1,7 @@
--------------------------------------------
--- Creating the function longest_streeak --
--------------------------------------------
-
-CREATE OR REPLACE FUNCTION longest_streak RETURN SYS_REFCURSOR AS
+CREATE OR REPLACE FUNCTION longest_streak(
+    p_start_date IN VARCHAR2,
+    p_end_date IN VARCHAR2
+) RETURN SYS_REFCURSOR AS
     prev_date TIMESTAMP (6) WITH TIME ZONE;
     curr_date TIMESTAMP (6) WITH TIME ZONE;
     streak_start_date TIMESTAMP (6) WITH TIME ZONE;
@@ -12,15 +11,24 @@ CREATE OR REPLACE FUNCTION longest_streak RETURN SYS_REFCURSOR AS
     end_date TIMESTAMP (6) WITH TIME ZONE;
     streak_length INTEGER;
     longest_streak_cur SYS_REFCURSOR;
+    ts_start_date TIMESTAMP (6) WITH TIME ZONE;
+    ts_end_date TIMESTAMP (6) WITH TIME ZONE;
 BEGIN
+    -- Convert input dates to TIMESTAMP WITH TIME ZONE
+    ts_start_date := TO_TIMESTAMP_TZ(p_start_date || ' 00:00:00.000000 +00:00', 'YYYY-MM-DD HH24:MI:SS.FF6 TZR');
+    ts_end_date := TO_TIMESTAMP_TZ(p_end_date || ' 23:59:59.999999 +00:00', 'YYYY-MM-DD HH24:MI:SS.FF6 TZR');
+
     -- Initialize variables
     prev_date := NULL;
     streak_start_date := NULL;
 
     -- Iterate through the rows ordered by start_date_local
-    FOR activity_rec IN (SELECT TRUNC(TO_TIMESTAMP_TZ(START_DATE_LOCAL, 'DD-MON-YY HH.MI.SS.FF9 AM TZR')) AS activity_date
-                         FROM ACTIVITIES
-                         ORDER BY TRUNC(TO_TIMESTAMP_TZ(START_DATE_LOCAL, 'DD-MON-YY HH.MI.SS.FF9 AM TZR'))) LOOP
+    FOR activity_rec IN (
+        SELECT TRUNC(TO_TIMESTAMP_TZ(START_DATE_LOCAL, 'DD-MON-YY HH.MI.SS.FF9 AM TZR')) AS activity_date
+        FROM ACTIVITIES
+        WHERE TRUNC(TO_TIMESTAMP_TZ(START_DATE_LOCAL, 'DD-MON-YY HH.MI.SS.FF9 AM TZR')) BETWEEN TRUNC(ts_start_date) AND TRUNC(ts_end_date)
+        ORDER BY TRUNC(TO_TIMESTAMP_TZ(START_DATE_LOCAL, 'DD-MON-YY HH.MI.SS.FF9 AM TZR'))
+    ) LOOP
         curr_date := activity_rec.activity_date;
 
         -- Check if this is the first date or if it's consecutive to the previous one
@@ -61,12 +69,6 @@ BEGIN
 
     RETURN longest_streak_cur;
 END;
-
-
------------------------------------------
--- Calling the function longest_streak --
------------------------------------------
-
 SET SERVEROUTPUT ON;
 
 DECLARE
@@ -74,9 +76,11 @@ DECLARE
     start_date TIMESTAMP (6) WITH TIME ZONE;
     end_date TIMESTAMP (6) WITH TIME ZONE;
     streak_length INTEGER;
+    p_start_date VARCHAR2(10) := '2023-01-01';
+    p_end_date VARCHAR2(10) := '2023-12-31';
 BEGIN
     -- Call the function and retrieve the cursor
-    longest_streak_cur := longest_streak();
+    longest_streak_cur := longest_streak(p_start_date, p_end_date);
 
     -- Fetch the results from the cursor into variables
     FETCH longest_streak_cur INTO start_date, end_date, streak_length;
@@ -90,3 +94,4 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('End Date: ' || TO_CHAR(end_date, 'DD-MON-YY'));
     DBMS_OUTPUT.PUT_LINE('Streak Length: ' || streak_length);
 END;
+
