@@ -2,6 +2,8 @@ import express from "express";
 import { configureMiddleware } from "./middleware/middleware.config";
 import { activityRouter, insightsRouter } from "./routes";
 import { ENV } from "./config/env.config";
+import "reflect-metadata";
+
 
 const app = express();
 
