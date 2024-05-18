@@ -51,7 +51,11 @@ const getLongestBreakPLSQL = async (
     return { start_date, end_date, days };
   } catch (error) {
     console.error("Error getting longest break:", error);
-    return null;
+    return {
+      start_date: "",
+      end_date: "",
+      days: 0,
+    };
   } finally {
     if (connection) await close(connection);
   }
@@ -94,7 +98,11 @@ const getLongestStreakPLSQL = async (
     return { start_date, end_date, days };
   } catch (error) {
     console.error("Error getting longest streak:", error);
-    return null;
+    return {
+      start_date: "",
+      end_date: "",
+      days: 0,
+    };
   } finally {
     if (connection) await close(connection);
   }
