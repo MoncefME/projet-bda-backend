@@ -70,7 +70,7 @@ activityRouter.post('/create', async (req, res) => {
       await createNewRun(
           athleteId,
           name,
-          distance,
+          Number(distance),
           sportType,
       );
       res.status(201).send('Run created successfully');
