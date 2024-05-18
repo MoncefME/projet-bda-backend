@@ -10,7 +10,6 @@ CREATE TABLE BDA.ACTIVITY_LOGS (
   action VARCHAR2(50),
   log_date DATE
 );
-DROP TABLE BDA.ACTIVITY_LOGS;
 
 
 CREATE SEQUENCE BDA.ACTIVITY_LOGS_SEQ
@@ -25,6 +24,9 @@ FOR EACH ROW
 BEGIN
   INSERT INTO BDA.ACTIVITY_LOGS (id,ATHLETE_ID, activity_id, action, log_date)
   VALUES (BDA.ACTIVITY_LOGS_SEQ.NEXTVAL,:NEW.ATHLETE_ID, :NEW.id, 'INSERT', SYSDATE);
+  
+  -- Call the preprocessing procedure
+    preprocessing_data;
 END;
 
 
