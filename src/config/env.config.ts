@@ -7,4 +7,5 @@ export const ENV = {
   ORACLE_PASSWORD: process.env.ORACLE_PASSWORD,
   ORACLE_CONNECTION_STRING: process.env.ORACLE_CONNECTION_STRING,
   PORT: process.env.PORT,
+  configDir: 'C:\oracle21c\homes\OraDB21Home1\network\admin'
 };

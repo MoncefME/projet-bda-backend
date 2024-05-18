@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { getActivityById, getAllActivities } from "../handlers/activity";
 import { getSpeedVsDistance } from "../handlers/activity/get-speed-vs-distance";
+import { createNewRun } from "../handlers/activity/create-new-run";
 
 const activityRouter = Router();
 
@@ -55,6 +56,27 @@ activityRouter.get("/speed-vs-distance/:activity_id", async (req: Request, res: 
   } catch (error) {
       console.error("Error:", error);
       return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+activityRouter.post('/create', async (req, res) => {
+  const { athleteId, name, distance, sportType } = req.body;
+
+  if (!athleteId || !name || !distance || !sportType) {
+      return res.status(400).send('All fields are required');
+  }
+
+  try {
+      await createNewRun(
+          athleteId,
+          name,
+          distance,
+          sportType,
+      );
+      res.status(201).send('Run created successfully');
+  } catch (error) {
+      console.error("Failed to create run:", error);
+      res.status(500).send('Internal Server Error');
   }
 });
 
