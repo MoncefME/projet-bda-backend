@@ -5,7 +5,6 @@ const databaseConfig: OracleDB.ConnectionAttributes = {
   user: ENV.ORACLE_USER,
   password: ENV.ORACLE_PASSWORD,
   connectString: ENV.ORACLE_CONNECTION_STRING,
-  configDir: process.env.TNS_ADMIN,
 };
 
 async function getConnection() {
