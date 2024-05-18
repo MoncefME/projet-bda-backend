@@ -1,13 +1,10 @@
 import OracleDB from "oracledb";
 import { ENV } from "./env.config";
 
-process.env.TNS_ADMIN = 'C:\\oracle21c\\homes\\OraDB21Home1\\NETWORK\\ADMIN';
-
 const databaseConfig: OracleDB.ConnectionAttributes = {
   user: ENV.ORACLE_USER,
   password: ENV.ORACLE_PASSWORD,
   connectString: ENV.ORACLE_CONNECTION_STRING,
-  configDir:process.env.TNS_ADMIN
 };
 
 async function getConnection() {
