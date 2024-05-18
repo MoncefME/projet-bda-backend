@@ -14,33 +14,45 @@ CREATE OR REPLACE FUNCTION find_activities(start_date_param DATE, end_date_param
     min_activities_count NUMBER;
     result activity_result;
 BEGIN
-    SELECT day_of_week, activity_count
-    INTO max_activities_day, max_activities_count
-    FROM (
-        SELECT TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY') AS day_of_week, COUNT(*) AS activity_count
-        FROM activities
-        WHERE start_date >= start_date_param AND start_date <= end_date_param AND SPORT_TYPE = 'Run'
-        GROUP BY TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY')
-        ORDER BY activity_count DESC
-    )
-    WHERE ROWNUM = 1;
+    BEGIN
+        SELECT day_of_week, activity_count
+        INTO max_activities_day, max_activities_count
+        FROM (
+            SELECT TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY') AS day_of_week, COUNT(*) AS activity_count
+            FROM activities
+            WHERE start_date >= start_date_param AND start_date <= end_date_param
+            GROUP BY TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY')
+            ORDER BY activity_count DESC
+        )
+        WHERE ROWNUM = 1;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            max_activities_day := NULL;
+            max_activities_count := 0;
+    END;
 
-    SELECT day_of_week, activity_count
-    INTO min_activities_day, min_activities_count
-    FROM (
-        SELECT TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY') AS day_of_week, COUNT(*) AS activity_count
-        FROM activities
-        WHERE start_date >= start_date_param AND start_date <= end_date_param AND SPORT_TYPE = 'Run'
-        GROUP BY TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY')
-        ORDER BY activity_count ASC
-    )
-    WHERE ROWNUM = 1;
+    BEGIN
+        SELECT day_of_week, activity_count
+        INTO min_activities_day, min_activities_count
+        FROM (
+            SELECT TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY') AS day_of_week, COUNT(*) AS activity_count
+            FROM activities
+            WHERE start_date >= start_date_param AND start_date <= end_date_param
+            GROUP BY TO_CHAR(start_date AT TIME ZONE 'UTC', 'DAY')
+            ORDER BY activity_count ASC
+        )
+        WHERE ROWNUM = 1;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            min_activities_day := NULL;
+            min_activities_count := 0;
+    END;
 
     -- Assign values to the result object
     result := activity_result(max_activities_day, max_activities_count, min_activities_day, min_activities_count);
 
     RETURN result; -- Return the result object
-END;
+END; 
 
 
 
