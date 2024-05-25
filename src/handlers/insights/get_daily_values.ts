@@ -8,6 +8,8 @@ interface DailyValue {
 }
 
 const getDailyValue = async (year: number): Promise<DailyValue[] | null> => {
+    console.time("Execution Time");
+
     let connection: OracleDB.Connection = await connect();
 
     try {
@@ -41,7 +43,7 @@ const getDailyValue = async (year: number): Promise<DailyValue[] | null> => {
 
             dailyValues.push({ date, count, level });
         }
-
+        console.timeEnd("Execution Time");
         return dailyValues;
     } catch (error) {
         console.error("Error getting longest streak:", error);
